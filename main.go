@@ -22,14 +22,14 @@ const (
 )
 
 func handler(w http.ResponseWriter, r *http.Request) {
-	http.ServeFile(w, r, "www/index.html")
+	http.ServeFile(w, r, "./www/index.html")
 }
 
 func main() {
 
 	go func() {
 		http.HandleFunc("/", handler)
-		http.ListenAndServe(":8080", nil)
+		http.ListenAndServe("0.0.0.0:8080", nil)
 	}()
 
 	s, err := wish.NewServer(
