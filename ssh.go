@@ -2,9 +2,11 @@ package main
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"io"
+	"strings"
 
 	"os"
 	"os/signal"
@@ -29,6 +31,9 @@ func sshHandler(h ssh.Handler) ssh.Handler {
 		io.WriteString(s, fmt.Sprintf("Hello, %s!\n", s.User()))
 		authorizedKey := gossh.MarshalAuthorizedKey(s.PublicKey())
 		io.WriteString(s, fmt.Sprintf("You used this public key to authenticate:\n%s", authorizedKey))
+		d := User{Name: s.User(), PublicKey: strings.TrimSpace(string(authorizedKey))}
+		file, _ := json.MarshalIndent(d, "", " ")
+		os.WriteFile(fmt.Sprintf("/tmp/%s", s.Command()[0]), file, 0644)
 		h(s)
 	}
 }

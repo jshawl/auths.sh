@@ -11,11 +11,20 @@
   <h1>auths.sh</h1>
   <p>Authenticate an http session via an ssh connection:</p>
   <pre><code>
-ssh auths.sh
+ssh auths.sh {{.Id}}
 </code></pre>
 <h2>Choose a username:</h2>
 <pre><code>
 ssh my-awesome-username@auths.sh
 </code></pre>
+
+<script>
+  int = setInterval(() => {
+    fetch("/?session_id={{.Id}}").then(response => response.json().then(d => {
+      console.log('done!', d)
+      clearInterval(int)
+    }))
+  }, 1000)
+</script>
 </body>
 </html>

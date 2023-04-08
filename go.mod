@@ -6,6 +6,7 @@ require (
 	github.com/charmbracelet/log v0.2.1
 	github.com/charmbracelet/ssh v0.0.0-20221117183211-483d43d97103
 	github.com/charmbracelet/wish v1.1.0
+	github.com/google/uuid v1.3.0
 	golang.org/x/crypto v0.7.0
 )
 
