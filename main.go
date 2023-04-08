@@ -29,7 +29,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-
+	pem := []byte(os.Getenv("HOST_PRIVATE_KEY"))
 	go func() {
 		http.HandleFunc("/", handler)
 		http.ListenAndServe("0.0.0.0:8080", nil)
@@ -37,6 +37,7 @@ func main() {
 
 	s, err := wish.NewServer(
 		wish.WithAddress(fmt.Sprintf("%s:%d", host, port)),
+		wish.WithHostKeyPEM(pem),
 		wish.WithPublicKeyAuth(func(ctx ssh.Context, key ssh.PublicKey) bool {
 			return true
 		}),
