@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"net/http"
 	"os"
 	"os/signal"
 	"syscall"
@@ -20,7 +21,17 @@ const (
 	port = 4202
 )
 
+func handler(w http.ResponseWriter, r *http.Request) {
+	http.ServeFile(w, r, "www/index.html")
+}
+
 func main() {
+
+	go func() {
+		http.HandleFunc("/", handler)
+		http.ListenAndServe(":8080", nil)
+	}()
+
 	s, err := wish.NewServer(
 		wish.WithAddress(fmt.Sprintf("%s:%d", host, port)),
 		wish.WithMiddleware(
@@ -36,7 +47,6 @@ func main() {
 	if err != nil {
 		log.Error("could not start server", "error", err)
 	}
-
 	done := make(chan os.Signal, 1)
 	signal.Notify(done, os.Interrupt, syscall.SIGINT, syscall.SIGTERM)
 	log.Info("Starting SSH server", "host", host, "port", port)
