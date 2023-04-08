@@ -4,11 +4,14 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"io"
 	"net/http"
 	"os"
 	"os/signal"
 	"syscall"
 	"time"
+
+	gossh "golang.org/x/crypto/ssh"
 
 	"github.com/charmbracelet/log"
 	"github.com/charmbracelet/ssh"
@@ -34,10 +37,15 @@ func main() {
 
 	s, err := wish.NewServer(
 		wish.WithAddress(fmt.Sprintf("%s:%d", host, port)),
+		wish.WithPublicKeyAuth(func(ctx ssh.Context, key ssh.PublicKey) bool {
+			return true
+		}),
 		wish.WithMiddleware(
 			func(h ssh.Handler) ssh.Handler {
 				return func(s ssh.Session) {
-					wish.Println(s, "Hello, world!")
+					io.WriteString(s, fmt.Sprintf("Hello, %s!\n", s.User()))
+					authorizedKey := gossh.MarshalAuthorizedKey(s.PublicKey())
+					io.WriteString(s, fmt.Sprintf("You used this public key to authenticate:\n%s", authorizedKey))
 					h(s)
 				}
 			},
