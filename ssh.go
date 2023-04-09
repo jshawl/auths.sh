@@ -26,6 +26,15 @@ const (
 	port = 4202
 )
 
+type Session struct {
+	Id string
+}
+
+type User struct {
+	Name      string
+	PublicKey string
+}
+
 func sshHandler(h ssh.Handler) ssh.Handler {
 	return func(s ssh.Session) {
 		io.WriteString(s, fmt.Sprintf("Hello, %s!\n", s.User()))
