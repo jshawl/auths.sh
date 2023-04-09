@@ -20,10 +20,14 @@ ssh my-awesome-username@auths.sh
 
 <script>
   const int = setInterval(() => {
-    fetch("/?session_id={{.Id}}").then(response => response.json().then(d => {
-      clearInterval(int)
-      window.location = '/session'
-    }))
+    fetch("/?session_id={{.Id}}").then(response => {
+      if(response.status === 200){
+        response.json().then(d => {
+          clearInterval(int)
+          window.location = '/session'
+        })
+      }
+    })
   }, 1000)
 </script>
 </body>
