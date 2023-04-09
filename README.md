@@ -12,7 +12,7 @@ Host localhost
 and then start the server
 
 ```
-HOST_PRIVATE_KEY="$(cat .ssh/host_private_key)" go run main.go
+HOST_PRIVATE_KEY="$(cat .ssh/host_private_key)" go run .
 
 # or
 
