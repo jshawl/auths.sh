@@ -9,22 +9,11 @@
 </head>
 <body>
   <h1>auths.sh</h1>
-  <p>Authenticate an http session via an ssh connection:</p>
+  <h2>You're In!</h2>
+  <p>Welcome, {{.Name}}!</p>
+  <p>You authenticated with the following public key:</p>
   <pre><code>
-ssh auths.sh {{.Id}}
+{{.PublicKey}}
 </code></pre>
-<h2>Choose a username:</h2>
-<pre><code>
-ssh my-awesome-username@auths.sh
-</code></pre>
-
-<script>
-  const int = setInterval(() => {
-    fetch("/?session_id={{.Id}}").then(response => response.json().then(d => {
-      clearInterval(int)
-      window.location = '/session'
-    }))
-  }, 1000)
-</script>
 </body>
 </html>
